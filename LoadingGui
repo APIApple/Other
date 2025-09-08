@@ -1,0 +1,52 @@
+local CoreGui = game:GetService("CoreGui")
+
+local LoadingScreen = Instance.new("ScreenGui")
+LoadingScreen.Name = "LoadingGui"
+LoadingScreen.IgnoreGuiInset = true
+LoadingScreen.ResetOnSpawn = false
+LoadingScreen.Parent = CoreGui
+
+local Background = Instance.new("Frame")
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.Position = UDim2.new(0, 0, 0, 0)
+Background.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Background.BorderSizePixel = 0
+Background.Parent = LoadingScreen
+
+local Spinner = Instance.new("ImageLabel")
+Spinner.Size = UDim2.new(0, 100, 0, 100)
+Spinner.Position = UDim2.new(0.5, -50, 0.5, -50)
+Spinner.BackgroundTransparency = 1
+Spinner.Image = "rbxassetid://2459243309"
+Spinner.ImageColor3 = Color3.fromRGB(255, 255, 255)
+Spinner.Parent = Background
+
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Size = UDim2.new(1, 0, 0, 50)
+LoadingText.Position = UDim2.new(0.5, -960, 0.5, 100)
+LoadingText.Text = "Loading..."
+LoadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoadingText.BackgroundTransparency = 1
+LoadingText.Font = Enum.Font.GothamBold
+LoadingText.TextSize = 28
+LoadingText.TextStrokeTransparency = 0.8
+LoadingText.Parent = Background
+
+local RunService = game:GetService("RunService")
+local RotationSpeed = 180
+local Rotation = 0
+
+local startTime = tick()
+local duration = 10
+
+local connection
+
+connection = RunService.RenderStepped:Connect(function(dt)
+	Rotation = Rotation + RotationSpeed * dt
+	Spinner.Rotation = Rotation % 360
+
+	if tick() - startTime >= duration then
+		connection:Disconnect()
+		LoadingScreen:Destroy()
+	end
+end)
